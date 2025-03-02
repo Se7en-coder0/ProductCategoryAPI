@@ -5,6 +5,7 @@ using ProductCategoryAPI.Data;
 using ProductCategoryAPI.Middleware;
 using ProductCategoryAPI.Repositories;
 using ProductCategoryAPI.Validators;
+using Serilog;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -21,6 +22,13 @@ builder.Services.AddScoped<IProductRepository, ProductRepository>();
 builder.Logging.ClearProviders();
 builder.Logging.AddConsole();
 builder.Logging.AddDebug();
+// Configure logging
+Log.Logger = new LoggerConfiguration()
+    .WriteTo.Console()
+    .WriteTo.File("logs/app.log", rollingInterval: RollingInterval.Day)
+    .CreateLogger();
+
+builder.Host.UseSerilog();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(c =>
 {
