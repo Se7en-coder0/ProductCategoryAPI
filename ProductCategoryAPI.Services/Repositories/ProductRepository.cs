@@ -1,9 +1,9 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
-using ProductCategoryAPI.Data;
-using ProductCategoryAPI.Models;
+using ProductCategoryAPI.Services.Data;
+using ProductCategoryAPI.Services.Models;
 
-namespace ProductCategoryAPI.Repositories
+namespace ProductCategoryAPI.Services.Repositories
 {
     public class ProductRepository : IProductRepository
     {
@@ -46,7 +46,18 @@ namespace ProductCategoryAPI.Repositories
             _context.Products.Add(product);
             await _context.SaveChangesAsync();
 
-            foreach (var categoryId in categoryIds)
+            var validCategories = await _context.Categories
+                .Where(c => categoryIds.Contains(c.Id))
+                .Select(c => c.Id)
+                .ToListAsync();
+
+            var invalidCategories = categoryIds.Except(validCategories).ToList();
+            if (invalidCategories.Any())
+            {
+                throw new Exception($"Invalid category IDs: {string.Join(", ", invalidCategories)}");
+            }
+
+            foreach (var categoryId in validCategories)
             {
                 _context.ProductCategories.Add(new ProductCategory
                 {
@@ -56,9 +67,6 @@ namespace ProductCategoryAPI.Repositories
             }
 
             await _context.SaveChangesAsync();
-            _logger.LogInformation("Product '{ProductName}' (ID: {ProductId}) was created with categories: {CategoryIds}",
-                product.Name, product.Id, string.Join(", ", categoryIds));
-
             return product;
         }
 

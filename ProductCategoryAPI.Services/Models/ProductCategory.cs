@@ -1,4 +1,4 @@
-﻿namespace ProductCategoryAPI.Models
+﻿namespace ProductCategoryAPI.Services.Models
 {
     public class ProductCategory
     {

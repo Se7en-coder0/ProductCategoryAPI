@@ -1,7 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using ProductCategoryAPI.Models;
+using ProductCategoryAPI.Services.Models;
 
-namespace ProductCategoryAPI.Data
+namespace ProductCategoryAPI.Services.Data
 {
     public class ApplicationDbContext : DbContext
     {
@@ -11,7 +11,7 @@ namespace ProductCategoryAPI.Data
         public DbSet<Category> Categories { get; set; }
         public DbSet<ProductCategory> ProductCategories { get; set; }
 
-        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        protected override void OnModelCreating(ModelBuilder modelBuilder)////ientityconfig best practice
         {
             modelBuilder.Entity<ProductCategory>()
                 .HasKey(pc => new { pc.ProductId, pc.CategoryId });

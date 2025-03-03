@@ -1,6 +1,6 @@
-﻿using ProductCategoryAPI.Models;
+﻿using ProductCategoryAPI.Services.Models;
 
-namespace ProductCategoryAPI.Repositories
+namespace ProductCategoryAPI.Services.Repositories
 {
     public interface IProductRepository
     {
