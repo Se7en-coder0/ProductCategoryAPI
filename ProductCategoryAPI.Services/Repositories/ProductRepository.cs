@@ -93,7 +93,6 @@ namespace ProductCategoryAPI.Services.Repositories
             existingProduct.Description = product.Description;
             existingProduct.Price = product.Price;
 
-            // Update categories without clearing existing data unnecessarily
             existingProduct.ProductCategories = existingProduct.ProductCategories
                 .Where(pc => categoryIds.Contains(pc.CategoryId))
                 .ToList();
